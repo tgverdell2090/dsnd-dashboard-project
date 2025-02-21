@@ -9,5 +9,6 @@ flake8
 ipython
 fastapi
 uvicorn
+setuptools
 employee_events-0.0.tar.gz #### Add text to install the python-package here
 
