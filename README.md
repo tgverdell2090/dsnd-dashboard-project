@@ -1,7 +1,31 @@
 
 # Software Engineering for Data Scientists 
 
-This repository contains starter code for the **Software Engineering for Data Scientists** final project. Please reference your course materials for documentation on this repository's structure and important files. Happy coding!
+This repository contains code for the **Software Engineering for Data Scientists** project. Happy coding!
+
+### Install Instructions
+
+Note: Built using Python 3.12 and Anaconda virtual environments.
+
+#### Steps:
+
+* Install requirments.txt
+```
+pip install -r requirements.txt
+```
+
+* Activate the Dashboard in path "reports/dashboard"
+```
+python dashboard.py
+```
+
+* Open the provided URL in a web browser
+Example URL:
+```
+http://0.0.0.0:5001 or http://localhost:5001
+```
+
+The Dashboard should now be available for viewing.
 
 ### Repository Structure
 ```
