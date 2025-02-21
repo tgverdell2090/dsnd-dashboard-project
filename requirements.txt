@@ -10,5 +10,4 @@ ipython
 fastapi
 uvicorn
 setuptools
-/python-package/dist/employee_events-0.0.tar.gz # Add text to install the python-package here
-
+-e ./python-package #### Add text to install the python-package here
