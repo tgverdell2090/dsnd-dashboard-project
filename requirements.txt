@@ -10,4 +10,5 @@ ipython
 fastapi
 uvicorn
 setuptools
+sqlite_minutils
 -e ./python-package #### Add text to install the python-package here
