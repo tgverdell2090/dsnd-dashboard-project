@@ -1,69 +1,51 @@
 import pytest
 from pathlib import Path
+import sqlite3
 
-# Using pathlib create a project_root
-# variable set to the absolute path
-# for the root of this project
-#### YOUR CODE HERE
+# Create project_root variable 
+project_root = Path(__file__).parent.parent.absolute()
 
-# apply the pytest fixture decorator
-# to a `db_path` function
-#### YOUR CODE HERE
-    
-    # Using the `project_root` variable
-    # return a pathlib object for the `employee_events.db` file
-    #### YOUR CODE HERE
+@pytest.fixture
+def db_path():
+    """Return path to employee_events.db file"""
+    path = project_root / 'python-package' / 'employee_events' / 'employee_events.db'
+    print(f"Database path: {path}")  # Debug print
+    return path
 
-# Define a function called
-# `test_db_exists`
-# This function should receive an argument
-# with the same name as the function
-# the creates the "fixture" for
-# the database's filepath
-#### YOUR CODE HERE
-    
-    # using the pathlib `.is_file` method
-    # assert that the sqlite database file exists
-    # at the location passed to the test_db_exists function
-    #### YOUR CODE HERE
+def test_db_exists(db_path):
+    """Assert database file exists"""
+    print(f"Checking if database exists at: {db_path}")  # Debug print
+    assert db_path.is_file(), f"Database file not found at {db_path}"
 
 @pytest.fixture
 def db_conn(db_path):
-    from sqlite3 import connect
-    return connect(db_path)
+    """Create database connection"""
+    try:
+        conn = sqlite3.connect(db_path)
+        yield conn
+        conn.close()
+    except sqlite3.Error as e:
+        pytest.fail(f"Failed to connect to database: {e}")
 
 @pytest.fixture
 def table_names(db_conn):
-    name_tuples = db_conn.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall()
-    return [x[0] for x in name_tuples]
+    """Get list of table names from database"""
+    try:
+        name_tuples = db_conn.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall()
+        names = [x[0] for x in name_tuples]
+        print(f"Found tables: {names}")  # Debug print
+        return names
+    except sqlite3.Error as e:
+        pytest.fail(f"Failed to get table names: {e}")
 
-# Define a test function called
-# `test_employee_table_exists`
-# This function should receive the `table_names`
-# fixture as an argument
-#### YOUR CODE HERE
+def test_employee_table_exists(table_names):
+    """Assert employee table exists"""
+    assert 'employee' in table_names, "Employee table not found in database"
 
-    # Assert that the string 'employee'
-    # is in the table_names list
-    #### YOUR CODE HERE
+def test_team_table_exists(table_names):
+    """Assert team table exists"""
+    assert 'team' in table_names, "Team table not found in database"
 
-# Define a test function called
-# `test_team_table_exists`
-# This function should receive the `table_names`
-# fixture as an argument
-#### YOUR CODE HERE
-
-    # Assert that the string 'team'
-    # is in the table_names list
-    #### YOUR CODE HERE
-
-# Define a test function called
-# `test_employee_events_table_exists`
-# This function should receive the `table_names`
-# fixture as an argument
-#### YOUR CODE HERE
-
-    # Assert that the string 'employee_events'
-    # is in the table_names list
-    #### YOUR CODE HERE
-
+def test_employee_events_table_exists(table_names):
+    """Assert employee_events table exists"""
+    assert 'employee_events' in table_names, "Employee_events table not found in database"
